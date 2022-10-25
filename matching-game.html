@@ -1,0 +1,91 @@
+<!--This program is a matching game. The objective is to find the extra smiley face on the left side column.-->
+<!--The user will need to click on the extra smiley face and if the incorrect one is chosen then the game is over.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Matching Game</title>
+
+
+<!--Internal style sheet-->
+<!--this fix the image to exact position-->
+  <style>
+    img{
+      position: absolute;
+    }
+/* sets both left and righ side to 500px square each */
+    div{
+      position: absolute;
+      width: 500px;
+      height: 500px;
+    }
+/*Thi moves the right side div to 500px */
+    #rightside{
+      left: 500px;
+      border-left: 1px solid;
+    } 
+  </style>
+</head>
+
+<body>
+  <h1>Matching Game</h1>
+  <p>Click on the extra smiling face on the left</p>
+
+<!--left side will contain all the smiley faces on the left and same for right side.-->
+  <div id="leftside"></div>
+  <div id="rightside"></div>
+  
+  <script>
+
+  //Global variables 
+  //decleration of number of faces
+    let numberOfFaces = 5;
+    const theLeftSide = document.querySelector("#leftside");
+    const theRightSide = document.querySelector("#rightside");
+    window.addEventListener('load', generateFaces);
+
+    //function to generate the faces
+    function generateFaces(){
+      for (let i = 0; i <numberOfFaces; i++){
+        const face = document.createElement('img');
+
+        face.src = "images/smile.png";
+        let randomTop = Math.floor(Math.random()*400)+1;
+        let randomLeft = Math.floor(Math.random()*400)+1;
+        face.style.top = randomTop + "px";
+        face.style.left = randomTop + "px";
+        theLeftSide.appendChild(face);
+
+      }
+// Clones the images to the right side.
+      const leftSideImages = theLeftSide.cloneNode(true);
+      leftSideImages.removeChild(leftSideImages.lastChild);
+      theRightSide.appendChild(leftSideImages);
+
+      theLeftSide.lastChild.addEventListener('click', nextLevel);
+      document.body.addEventListener('click', gameOver);
+    }
+
+      //An event handler function is used for the extra face.
+      function nextLevel(event){
+        event.stopPropagation();
+        numberOfFaces += 5;
+        while(theLeftSide.firstChild){
+          theLeftSide.removeChild(theLeftSide.firstChild);
+        }
+        while(theRightSide.firstChild){
+          theRightSide.removeChild(theRightSide.firstChild);
+        }
+        generateFaces();
+      }
+      //function Game Over 
+      function gameOver(){
+        alert('Game Over!');
+        document.body.removeEventListener('click', gameOver);
+        theLeftSide.lastChild.removeEventListener('click', nextLevel);
+      }
+    
+  </script>
+</body>
+
+</html>
